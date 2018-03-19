@@ -38,15 +38,6 @@ public class Vector3f {
 		return this;
 	}
 
-	public Vector3f rotate(float angle) {
-//		double rad = Math.toRadians(angle);
-//		double cos = Math.cos(rad);
-//		double sin = Math.sin(rad);
-//
-//		return new Vector3f((float) ((cos * x) - (sin * y)),(float) ((sin * x) + (cos * y)));
-		return null;
-	}
-
 	public Vector3f rotate(float angle, Vector3f axis) {
 		float sinHalfAngle = (float) Math.sin(Math.toRadians(angle / 2));
 		float cosHalfAngle = (float) Math.cos(Math.toRadians(angle / 2));
