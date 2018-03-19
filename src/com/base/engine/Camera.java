@@ -29,7 +29,7 @@ public class Camera {
 
 	public void input() {
 		float moveAmount = (float) (10 * Time.getDelta());
-		float rotAmount = (float) (10 * Time.getDelta());
+		float rotAmount = (float) (100 * Time.getDelta());
 
 		if(Input.getKey(Keyboard.KEY_W)) {
 			move(getForward(), moveAmount);

@@ -7,10 +7,24 @@ public class Game {
 	private Mesh mesh;
 	private Shader shader;
 	private Transform transform;
+	private Texture texture;
 	private Camera camera;
 
 	public Game() {
-		mesh = ResourceLoader.loadMesh("box.obj");
+		mesh = new Mesh();
+		texture = ResourceLoader.loadTexture("text.png");
+		System.out.println("texture:" + texture.getId());
+		Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1,-1,0), new Vector2f(0,0)),
+							  new Vertex(new Vector3f(0,1,0), new Vector2f(.5f,0)),
+							  new Vertex(new Vector3f(1,-1,0), new Vector2f(1.0f,0)),
+							  new Vertex(new Vector3f(0,-1,1), new Vector2f(0,0.5f))};
+		int[] indices = new int[] {3,1,0,
+								   2,1,3,
+								   0,1,2,
+								   0,2,3};
+		mesh.addVertices(vertices, indices);
+
+//		mesh = ResourceLoader.loadMesh("box.obj");
 //		mesh = ResourceLoader.loadMesh("IronMan.obj");
 
 		shader = new Shader();
@@ -61,6 +75,7 @@ public class Game {
 
 	public void render() {
 		shader.bind();
+		texture.bind();
 		shader.setUniform("transform", transform.getProjectedTransformation());
 		mesh.draw();
 	}
