@@ -23,11 +23,8 @@ public class Camera {
 
 	public Camera(Vector3f pos, Vector3f forward, Vector3f up) {
 		this.pos = pos;
-		this.forward = forward;
-		this.up = up;
-
-		up.normalize();
-		forward.normalize();
+		this.forward = forward.normalized();
+		this.up = up.normalized();
 	}
 
 	public void input() {
@@ -80,23 +77,23 @@ public class Camera {
 	}
 
 	public void rotateY(float angle) {
-		Vector3f hAxis = yAxis.cross(forward).normalize();
-		forward.rotate(angle, yAxis).normalize();
-		up = forward.cross(hAxis).normalize();
+		Vector3f hAxis = yAxis.cross(forward).normalized();
+		forward = forward.rotate(angle, yAxis).normalized();
+		up = forward.cross(hAxis).normalized();
 	}
 
 	public void rotateX(float angle) {
-		Vector3f hAxis = yAxis.cross(forward).normalize();
-		forward.rotate(angle, hAxis).normalize();
-		up = forward.cross(hAxis).normalize();
+		Vector3f hAxis = yAxis.cross(forward).normalized();
+		forward = forward.rotate(angle, hAxis).normalized();
+		up = forward.cross(hAxis).normalized();
 	}
 
 	public Vector3f getLeft() {
-		return forward.cross(up).normalize();
+		return forward.cross(up).normalized();
 	}
 
 	public Vector3f getRight() {
-		return up.cross(forward).normalize();
+		return up.cross(forward).normalized();
 	}
 
 }

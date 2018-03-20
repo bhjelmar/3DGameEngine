@@ -16,7 +16,7 @@ public class ResourceLoader {
 		String ext = splitArray[splitArray.length - 1];
 
 		try {
-			int id = TextureLoader.getTexture(filename, new FileInputStream(new File("./res/textures/" + filename))).getTextureID();
+			int id = TextureLoader.getTexture(ext, new FileInputStream(new File("./res/textures/" + filename))).getTextureID();
 			return new Texture(id);
 		} catch (Exception e) {
 			e.printStackTrace();

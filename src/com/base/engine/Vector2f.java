@@ -19,13 +19,9 @@ public class Vector2f {
 		return x * v.getX() + y * v.getY();
 	}
 
-	public Vector2f normalize() {
+	public Vector2f normalized() {
 		float length = length();
-
-		this.x /= length;
-		this.y /= length;
-
-		return this;
+		return new Vector2f(this.x /= length, this.y /= length);
 	}
 
 	public Vector2f rotate(float angle) {
