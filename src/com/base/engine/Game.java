@@ -5,7 +5,7 @@ import org.lwjgl.input.Keyboard;
 public class Game {
 
 	private Mesh mesh;
-	private BasicShader shader;
+	private Shader shader;
 	private Material material;
 	private Transform transform;
 	private Camera camera;
@@ -26,13 +26,15 @@ public class Game {
 		mesh = new Mesh();
 		mesh.addVertices(vertices, indices);
 
-		material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(0, 0, 0));
-		shader = BasicShader.getInstance();
+		material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(0, 1, 1));
+		shader = PhongShader.getInstance();
 		camera = new Camera();
 
 		Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000);
 		Transform.setCamera(camera);
 		transform = new Transform();
+
+		PhongShader.setAmbientLight(new Vector3f(.1f, 0.1f, 0.1f));
 	}
 
 	public void input() {
