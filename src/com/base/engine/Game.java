@@ -14,19 +14,29 @@ public class Game {
 //		mesh = ResourceLoader.loadMesh("box.obj");
 //		mesh = ResourceLoader.loadMesh("IronMan.obj");
 
-		Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1,-1,0), new Vector2f(0,0)),
-				  new Vertex(new Vector3f(0,1,0), new Vector2f(0.5f,0)),
-				  new Vertex(new Vector3f(1,-1,0), new Vector2f(1.0f,0)),
-				  new Vertex(new Vector3f(0,-1,1), new Vector2f(0.5f,1.0f))};
+//		Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1,-1,0), new Vector2f(0,0)),
+//				  new Vertex(new Vector3f(0,1,0), new Vector2f(0.5f,0)),
+//				  new Vertex(new Vector3f(1,-1,0), new Vector2f(1.0f,0)),
+//				  new Vertex(new Vector3f(0,-1,1), new Vector2f(0.5f,1.0f))};
+//
+//		int[] indices = new int[] {3,1,0,
+//								   2,1,3,
+//								   0,1,2,
+//								   0,2,3};
+		Vertex[] vertices = new Vertex[] { new Vertex( new Vector3f(-1.0f, -1.0f, 0.5773f),	new Vector2f(0.0f, 0.0f)),
+			new Vertex( new Vector3f(0.0f, -1.0f, -1.15475f),		new Vector2f(0.5f, 0.0f)),
+			new Vertex( new Vector3f(1.0f, -1.0f, 0.5773f),		new Vector2f(1.0f, 0.0f)),
+			new Vertex( new Vector3f(0.0f, 1.0f, 0.0f),      new Vector2f(0.5f, 1.0f)) };
 
-		int[] indices = new int[] {3,1,0,
-								   2,1,3,
-								   0,1,2,
-								   0,2,3};
+		int indices[] = { 0, 3, 1,
+			1, 3, 2,
+			2, 3, 0,
+			1, 2, 0 };
+
 		mesh = new Mesh();
-		mesh.addVertices(vertices, indices);
+		mesh.addVertices(vertices, indices, true);
 
-		material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(0, 1, 1));
+		material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(1 , 1, 1));
 		shader = PhongShader.getInstance();
 		camera = new Camera();
 
@@ -35,6 +45,14 @@ public class Game {
 		transform = new Transform();
 
 		PhongShader.setAmbientLight(new Vector3f(.1f, 0.1f, 0.1f));
+		PhongShader.setDirectionalLight(new DirectionalLight(
+				new BaseLight(
+						new Vector3f(1, 1, 1),
+						0.8f
+				),
+				new Vector3f(1, 1, 1)
+			)
+		);
 	}
 
 	public void input() {
@@ -64,7 +82,7 @@ public class Game {
 		temp += Time.getDelta();
 		float sinTemp = (float) Math.sin(temp);
 		transform.setTranslation(0, 0, 5);
-		transform.setRotation(sinTemp * 180, sinTemp * 180, sinTemp * 180);
+		transform.setRotation(0, sinTemp * 180, 0);
 //		transform.setScale(0.7f * sinTemp, 0.7f * sinTemp, 0.7f * sinTemp);
 
 	}

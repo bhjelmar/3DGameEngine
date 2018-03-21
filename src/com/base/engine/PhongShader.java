@@ -9,7 +9,15 @@ public class PhongShader extends Shader {
     private static final PhongShader instance = new PhongShader();
 
     @Getter @Setter
-    private static Vector3f ambientLight;
+    private static Vector3f ambientLight = new Vector3f(.1f, 0.1f, 0.1f);
+    @Getter @Setter
+    private static DirectionalLight directionalLight = new DirectionalLight(
+            new BaseLight(
+                    new Vector3f(1, 1, 1),
+                    0
+            ),
+            new Vector3f(0, 0, 0)
+    );
 
     private PhongShader() {
         super();
@@ -19,8 +27,18 @@ public class PhongShader extends Shader {
         compileShader();
 
         addUniform("transform");
+        addUniform("transformProjected");
         addUniform("baseColor");
         addUniform("ambientLight");
+
+        addUniform("directionalLight.base.color");
+        addUniform("directionalLight.base.intensity");
+        addUniform("directionalLight.direction");
+
+        addUniform("specularIntensity");
+        addUniform("specularPower");
+
+        addUniform("eyePos");
     }
 
     public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) {
@@ -30,9 +48,28 @@ public class PhongShader extends Shader {
             RenderUtil.unbindTextures();
         }
 
-        setUniform("transform", projectedMatrix);
+        setUniform("transform", worldMatrix);
+        setUniform("transformProjected", projectedMatrix);
         setUniform("baseColor", material.getColor());
+
         setUniform("ambientLight", ambientLight);
+        setUniform("directionalLight", directionalLight);
+
+        setUniformf("specularIntensity", material.getSpecularIntensity());
+        setUniformf("specularPower", material.getSpecularPower());
+
+        setUniform("eyePos", Transform.getCamera().getPos());
+
+    }
+
+    public void setUniform(String uniformName, BaseLight baseLight) {
+        setUniform(uniformName + ".color", baseLight.getColor());
+        setUniformf(uniformName + ".intensity", baseLight.getIntensity());
+    }
+
+    public void setUniform(String uniformName, DirectionalLight directionalLight) {
+        setUniform(uniformName + ".base", directionalLight.getBaseLight());
+        setUniform(uniformName + ".direction", directionalLight.getDirection());
     }
 
 }
