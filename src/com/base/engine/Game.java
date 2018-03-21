@@ -1,7 +1,5 @@
 package com.base.engine;
 
-import org.lwjgl.input.Keyboard;
-
 public class Game {
 
 	private Mesh mesh;
@@ -10,33 +8,39 @@ public class Game {
 	private Transform transform;
 	private Camera camera;
 
+	PointLight pLight1 = new PointLight(
+			new BaseLight(
+					new Vector3f(1,0.5f,0),
+					0.8f
+			),
+			new Attenuation(0, 0, 1),
+			new Vector3f(-2, 0, 3f)
+	);
+	PointLight pLight2 = new PointLight(
+			new BaseLight(
+					new Vector3f(0, 0.5f,1),
+					0.8f
+			),
+			new Attenuation(0, 0, 1),
+			new Vector3f(2, 0, 7f)
+	);
+
 	public Game() {
-//		mesh = ResourceLoader.loadMesh("box.obj");
-//		mesh = ResourceLoader.loadMesh("IronMan.obj");
+		float fieldDepth = 10.0f;
+		float fieldWidth = 10.0f;
 
-//		Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1,-1,0), new Vector2f(0,0)),
-//				  new Vertex(new Vector3f(0,1,0), new Vector2f(0.5f,0)),
-//				  new Vertex(new Vector3f(1,-1,0), new Vector2f(1.0f,0)),
-//				  new Vertex(new Vector3f(0,-1,1), new Vector2f(0.5f,1.0f))};
-//
-//		int[] indices = new int[] {3,1,0,
-//								   2,1,3,
-//								   0,1,2,
-//								   0,2,3};
-		Vertex[] vertices = new Vertex[] { new Vertex( new Vector3f(-1.0f, -1.0f, 0.5773f),	new Vector2f(0.0f, 0.0f)),
-			new Vertex( new Vector3f(0.0f, -1.0f, -1.15475f),		new Vector2f(0.5f, 0.0f)),
-			new Vertex( new Vector3f(1.0f, -1.0f, 0.5773f),		new Vector2f(1.0f, 0.0f)),
-			new Vertex( new Vector3f(0.0f, 1.0f, 0.0f),      new Vector2f(0.5f, 1.0f)) };
+		Vertex[] vertices = new Vertex[] { 	new Vertex( new Vector3f(-fieldWidth, 0.0f, -fieldDepth), new Vector2f(0.0f, 0.0f)),
+				new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth * 3), new Vector2f(0.0f, 1.0f)),
+				new Vertex( new Vector3f(fieldWidth * 3, 0.0f, -fieldDepth), new Vector2f(1.0f, 0.0f)),
+				new Vertex( new Vector3f(fieldWidth * 3, 0.0f, fieldDepth * 3), new Vector2f(1.0f, 1.0f))};
 
-		int indices[] = { 0, 3, 1,
-			1, 3, 2,
-			2, 3, 0,
-			1, 2, 0 };
+		int indices[] = { 0, 1, 2,
+				2, 1, 3};
 
 		mesh = new Mesh();
 		mesh.addVertices(vertices, indices, true);
 
-		material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(1 , 1, 1));
+		material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(1,1,1), 1, 8);
 		shader = PhongShader.getInstance();
 		camera = new Camera();
 
@@ -45,14 +49,16 @@ public class Game {
 		transform = new Transform();
 
 		PhongShader.setAmbientLight(new Vector3f(.1f, 0.1f, 0.1f));
-		PhongShader.setDirectionalLight(new DirectionalLight(
-				new BaseLight(
-						new Vector3f(1, 1, 1),
-						0.8f
-				),
-				new Vector3f(1, 1, 1)
-			)
-		);
+//		PhongShader.setDirectionalLight(new DirectionalLight(
+//				new BaseLight(
+//						new Vector3f(1, 1, 1),
+//						0.8f
+//				),
+//				new Vector3f(1, 1, 1)
+//			)
+//		);
+
+		PhongShader.setPointLights(new PointLight[] {pLight1, pLight2});
 	}
 
 	public void input() {
@@ -81,10 +87,11 @@ public class Game {
 	public void update() {
 		temp += Time.getDelta();
 		float sinTemp = (float) Math.sin(temp);
-		transform.setTranslation(0, 0, 5);
-		transform.setRotation(0, sinTemp * 180, 0);
+		transform.setTranslation(0, -1, 5);
+//		transform.setRotation(0, sinTemp * 180, 0);
 //		transform.setScale(0.7f * sinTemp, 0.7f * sinTemp, 0.7f * sinTemp);
-
+		pLight1.setPosition(new Vector3f(3, sinTemp,8.0f * (float)(Math.sin(temp) + 1.0/2.0) + 10));
+		pLight2.setPosition(new Vector3f(7, sinTemp,8.0f * (float)(Math.cos(temp) + 1.0/2.0) + 10));
 	}
 
 	public void render() {

@@ -6,9 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @AllArgsConstructor @ToString
-public class BaseLight {
+public class Attenuation {
 
-    private Vector3f color;
-    private float intensity;
+    private float constant;
+    private float linear;
+    private float exponent;
 
 }
