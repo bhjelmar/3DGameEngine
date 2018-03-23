@@ -5,14 +5,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @ToString
-public class DirectionalLight {
+public class SpotLight {
 
-    private BaseLight baseLight;
-    private Vector3f direction;
+    PointLight pointLight;
+    Vector3f direction;
+    float cutoff;
 
-    public DirectionalLight(BaseLight baseLight, Vector3f direction) {
-        this.baseLight = baseLight;
+    public SpotLight(PointLight pointLight, Vector3f direction, float cutoff) {
+        this.pointLight = pointLight;
         this.direction = direction.normalized();
+        this.cutoff = cutoff;
     }
 
     public void setDirection(Vector3f direction) {

@@ -9,7 +9,8 @@ import lombok.ToString;
 public class PointLight {
 
     private BaseLight base;
-    private Attenuation atten;
+    private Attenuation attenuation;
     private Vector3f position;
+    private float range;
 
 }

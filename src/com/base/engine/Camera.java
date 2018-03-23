@@ -28,7 +28,7 @@ public class Camera {
 	}
 
 	public void input() {
-		float mouseSensitivity = 0.25f;
+		float mouseSensitivity = 0.15f;
 		float moveAmount = (float) (25 * Time.getDelta());
 
 		if(Input.getKey(Keyboard.KEY_ESCAPE)) {

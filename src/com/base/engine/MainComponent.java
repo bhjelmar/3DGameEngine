@@ -9,7 +9,7 @@ public class MainComponent {
 	public static final String TITLE = "3D Engine";
 	public static final double FRAME_CAP = 5000.0;
 
-	private boolean isRunning = false;
+	private boolean isRunning;
 	private Game game;
 
 	public MainComponent() {

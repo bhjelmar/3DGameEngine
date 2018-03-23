@@ -6,6 +6,7 @@ import lombok.Setter;
 public class PhongShader extends Shader {
 
     private static final int MAX_POINT_LIGHTS = 4;
+    private static final int MAX_SPOT_LIGHTS = 4;
 
     @Getter
     private static final PhongShader instance = new PhongShader();
@@ -22,12 +23,14 @@ public class PhongShader extends Shader {
     );
     @Getter
     private static PointLight[] pointLights = new PointLight[] {};
+    @Getter
+    private static SpotLight[] spotLights = new SpotLight[] {};
 
     private PhongShader() {
         super();
 
-        addVertexShader(ResourceLoader.loadShader("phongVertex.vert"));
-        addFragmentShader(ResourceLoader.loadShader("phongFragment.frag"));
+        addVertexShaderFromFile("phongVertex.vert");
+        addFragmentShaderFromFile("phongFragment.frag");
         compileShader();
 
         addUniform("transform");
@@ -51,6 +54,19 @@ public class PhongShader extends Shader {
         	addUniform("pointLights[" + i + "].atten.linear");
         	addUniform("pointLights[" + i + "].atten.exponent");
         	addUniform("pointLights[" + i + "].position");
+            addUniform("pointLights[" + i + "].range");
+        }
+
+        for(int i = 0; i < MAX_SPOT_LIGHTS; i++) {
+            addUniform("spotLights[" + i + "].pointLight.base.color");
+            addUniform("spotLights[" + i + "].pointLight.base.intensity");
+            addUniform("spotLights[" + i + "].pointLight.atten.constant");
+            addUniform("spotLights[" + i + "].pointLight.atten.linear");
+            addUniform("spotLights[" + i + "].pointLight.atten.exponent");
+            addUniform("spotLights[" + i + "].pointLight.position");
+            addUniform("spotLights[" + i + "].pointLight.range");
+            addUniform("spotLights[" + i + "].direction");
+            addUniform("spotLights[" + i + "].cutoff");
         }
     }
 
@@ -70,6 +86,9 @@ public class PhongShader extends Shader {
 
         for(int i = 0; i < pointLights.length; i++) {
             setUniform("pointLights[" + i + "]", pointLights[i]);
+        }
+        for(int i = 0; i < spotLights.length; i++) {
+            setUniform("spotLights[" + i + "]", spotLights[i]);
         }
 
         setUniformf("specularIntensity", material.getSpecularIntensity());
@@ -91,10 +110,17 @@ public class PhongShader extends Shader {
 
     public void setUniform(String uniformName, PointLight pointLight) {
         setUniform(uniformName + ".base", pointLight.getBase());
-        setUniformf(uniformName + ".atten.constant", pointLight.getAtten().getConstant());
-        setUniformf(uniformName + ".atten.linear", pointLight.getAtten().getLinear());
-        setUniformf(uniformName + ".atten.exponent", pointLight.getAtten().getExponent());
+        setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getConstant());
+        setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getLinear());
+        setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getExponent());
         setUniform(uniformName + ".position", pointLight.getPosition());
+        setUniformf(uniformName + ".range", pointLight.getRange());
+    }
+
+    public void setUniform(String uniformName, SpotLight spotLight) {
+        setUniform(uniformName + ".pointLight", spotLight.getPointLight());
+        setUniform(uniformName + ".direction", spotLight.getDirection());
+        setUniformf(uniformName + ".cutoff", spotLight.getCutoff());
     }
 
     public static void setPointLights(PointLight[] pointLights) {
@@ -104,6 +130,16 @@ public class PhongShader extends Shader {
             System.exit(1);
         } else {
             PhongShader.pointLights = pointLights;
+        }
+    }
+
+    public static void setSpotLights(SpotLight[] spotLights) {
+        if(spotLights.length > MAX_SPOT_LIGHTS) {
+            System.err.println(spotLights.length + " spotlights passed. Max allowed is: " + MAX_SPOT_LIGHTS);
+            new Exception().printStackTrace();
+            System.exit(1);
+        } else {
+            PhongShader.spotLights = spotLights;
         }
     }
 

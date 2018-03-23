@@ -14,6 +14,7 @@ public class Window {
 		Display.setTitle(title);
 		try {
 			Display.setDisplayMode(new DisplayMode(width, height));
+//			Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
 
 			PixelFormat pixel = new PixelFormat();
 			ContextAttribs context = new ContextAttribs(4, 1).withForwardCompatible(true).withProfileCore(true);
