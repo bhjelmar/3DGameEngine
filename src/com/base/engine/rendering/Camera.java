@@ -1,5 +1,9 @@
-package com.base.engine;
+package com.base.engine.rendering;
 
+import com.base.engine.core.Input;
+import com.base.engine.core.Time;
+import com.base.engine.core.Vector2f;
+import com.base.engine.core.Vector3f;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,22 +1,36 @@
-package com.base.engine;
+package com.base.engine.core;
 
-import org.lwjgl.LWJGLException;
+import com.base.engine.rendering.RenderUtil;
+import com.base.engine.rendering.Window;
 
-public class MainComponent {
-
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 800;
-	public static final String TITLE = "3D Engine";
-	public static final double FRAME_CAP = 5000.0;
+public class CoreEngine {
 
 	private boolean isRunning;
+
 	private Game game;
 
-	public MainComponent() {
+	private int width;
+	private int height;
+
+	private double frameTime;
+
+	public CoreEngine(int width, int height, double frameRate, Game game) {
+		isRunning = false;
+		this.game = game;
+		this.width = width;
+		this.height = height;
+		this.frameTime = 1 / frameRate;
+	}
+
+	private void initializeRenderingSystem() {
 		System.out.println(RenderUtil.getOpenGlVersion());
 		RenderUtil.initGraphics();
-		isRunning = false;
-		game = new Game();
+
+	}
+
+	public void createWindow(String title) {
+		Window.createWindow(width, height, title);
+		initializeRenderingSystem();
 	}
 
 	public void start() {
@@ -32,12 +46,12 @@ public class MainComponent {
 	}
 
 	private void run() {
+		game.init();
+
 		isRunning = true;
 
 		int frames = 0;
 		int frameCounter = 0;
-
-		final double frameTime = 1.0 / FRAME_CAP;
 
 		long lastTime = Time.getTime();
 		double unprocessedTime = 0;
@@ -48,6 +62,7 @@ public class MainComponent {
 
 			long startTime = Time.getTime();
 			//passed time in 1 frame
+
 			long passedTime = startTime - lastTime;
 			lastTime = startTime;
 
@@ -98,12 +113,6 @@ public class MainComponent {
 
 	private void cleanup() {
 		Window.dispose();
-	}
-
-	public static void main(String[] args) throws LWJGLException {
-		Window.createWindow(WIDTH, HEIGHT, TITLE);
-		MainComponent game = new MainComponent();
-		game.start();
 	}
 
 }

@@ -1,5 +1,6 @@
-package com.base.engine;
+package com.base.engine.rendering;
 
+import com.base.engine.core.Matrix4f;
 import lombok.Getter;
 
 public class BasicShader extends Shader {

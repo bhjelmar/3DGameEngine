@@ -1,6 +1,6 @@
-package com.base.engine;
+package com.base.engine.core;
 
-import lombok.AllArgsConstructor;
+import com.base.engine.rendering.Camera;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter @Setter @ToString
 public class Transform {
 
-	private static  Camera camera;
+	private static Camera camera;
 
 	//how close/far an object can be before clipping
 	private static float zNear;

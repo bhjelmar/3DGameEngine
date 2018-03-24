@@ -1,5 +1,6 @@
-package com.base.engine;
+package com.base.engine.core;
 
+import com.base.engine.rendering.Vertex;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;

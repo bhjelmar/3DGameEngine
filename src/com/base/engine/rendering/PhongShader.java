@@ -1,5 +1,8 @@
-package com.base.engine;
+package com.base.engine.rendering;
 
+import com.base.engine.core.Matrix4f;
+import com.base.engine.core.Transform;
+import com.base.engine.core.Vector3f;
 import lombok.Getter;
 import lombok.Setter;
 

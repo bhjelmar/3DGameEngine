@@ -1,5 +1,7 @@
-package com.base.engine;
+package com.base.engine.rendering;
 
+import com.base.engine.core.Vector2f;
+import com.base.engine.core.Vector3f;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
