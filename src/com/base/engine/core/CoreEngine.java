@@ -1,6 +1,5 @@
 package com.base.engine.core;
 
-import com.base.engine.rendering.RenderUtil;
 import com.base.engine.rendering.Window;
 
 public class CoreEngine {
@@ -8,6 +7,8 @@ public class CoreEngine {
 	private boolean isRunning;
 
 	private Game game;
+
+	private RenderingEngine renderingEngine;
 
 	private int width;
 	private int height;
@@ -22,51 +23,47 @@ public class CoreEngine {
 		this.frameTime = 1 / frameRate;
 	}
 
-	private void initializeRenderingSystem() {
-		System.out.println(RenderUtil.getOpenGlVersion());
-		RenderUtil.initGraphics();
-
-	}
-
 	public void createWindow(String title) {
 		Window.createWindow(width, height, title);
-		initializeRenderingSystem();
+		this.renderingEngine = new RenderingEngine();
 	}
 
 	public void start() {
 		if(isRunning) {
 			return;
-		} else {
-			run();
 		}
+		run();
 	}
 
 	public void stop() {
+		if(!isRunning) {
+			return;
+		}
 		isRunning = false;
 	}
 
 	private void run() {
-		game.init();
-
 		isRunning = true;
 
 		int frames = 0;
 		int frameCounter = 0;
 
-		long lastTime = Time.getTime();
+		game.init();
+
+		double lastTime = Time.getTime();
 		double unprocessedTime = 0;
 
 		while(isRunning) {
 
 			boolean render = false;
 
-			long startTime = Time.getTime();
+			double startTime = Time.getTime();
 			//passed time in 1 frame
 
-			long passedTime = startTime - lastTime;
+			double passedTime = startTime - lastTime;
 			lastTime = startTime;
 
-			unprocessedTime += passedTime / (double) Time.SECOND;
+			unprocessedTime += passedTime;
 			frameCounter += passedTime;
 
 			while(unprocessedTime > frameTime) {
@@ -78,12 +75,13 @@ public class CoreEngine {
 					stop();
 				}
 
-				Time.setDelta(frameTime);
-				game.input();
+				game.input((float) frameTime);
+				renderingEngine.input((float) frameTime);
 				Input.update();
-				game.update();
 
-				if(frameCounter >= Time.SECOND) {
+				game.update((float) frameTime);
+
+				if(frameCounter >= 1.0) {
 					System.out.println("fps" + frames);
 					frames = 0;
 					frameCounter = 0;
@@ -91,7 +89,9 @@ public class CoreEngine {
 
 			}
 			if(render) {
-				render();
+				renderingEngine.render(game.getRootObject());
+				Window.render();
+//				render();
 				frames++;
 			} else {
 				try {
@@ -103,12 +103,6 @@ public class CoreEngine {
 
 		}
 		cleanup();
-	}
-
-	private void render() {
-		RenderUtil.clearScreen();
-		game.render();
-		Window.render();
 	}
 
 	private void cleanup() {

@@ -1,6 +1,7 @@
 package com.base.engine.rendering;
 
 import com.base.engine.core.Matrix4f;
+import com.base.engine.core.Transform;
 import lombok.Getter;
 
 public class BasicShader extends Shader {
@@ -19,12 +20,12 @@ public class BasicShader extends Shader {
         addUniform("color");
     }
 
-    public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) {
-        if(material.getTexture() != null) {
-            material.getTexture().bind();
-        } else {
-            RenderUtil.unbindTextures();
-        }
+    public void updateUniforms(Transform transform, Material material) {
+        Matrix4f worldMatrix = transform.getTransformation();
+        Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().mul(worldMatrix);
+
+
+        material.getTexture().bind();
 
         setUniform("transform", projectedMatrix);
         setUniform("color", material.getColor());

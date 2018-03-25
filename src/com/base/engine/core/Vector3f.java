@@ -1,11 +1,9 @@
 package com.base.engine.core;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter @Setter @ToString @AllArgsConstructor
+@Getter @Setter @EqualsAndHashCode
+@ToString @AllArgsConstructor
 public class Vector3f {
 
 	private float x;
@@ -50,6 +48,10 @@ public class Vector3f {
 		return new Vector3f(w.getX(), w.getY(), w.getZ());
 	}
 
+	public Vector3f lerp(Vector3f dest, float lerpFactor) {
+		return dest.sub(this).mult(lerpFactor).add(this);
+	}
+
 	public Vector3f add(Vector3f v) {
 		return new Vector3f(x + v.getX(), y + v.getY(), z + v.getZ());
 	}
@@ -85,4 +87,29 @@ public class Vector3f {
 	public Vector3f abs() {
 		return new Vector3f(Math.abs(x), Math.abs(y), Math.abs(z));
 	}
+
+	public Vector2f getXY() {
+		return new Vector2f(x, y);
+	}
+
+	public Vector2f getYZ() {
+		return new Vector2f(y, z);
+	}
+
+	public Vector2f getZX() {
+		return new Vector2f(z, x);
+	}
+
+	public Vector2f getYX() {
+		return new Vector2f(y, x);
+	}
+
+	public Vector2f getZY() {
+		return new Vector2f(z, y);
+	}
+
+	public Vector2f getXZ() {
+		return new Vector2f(x, z);
+	}
+
 }

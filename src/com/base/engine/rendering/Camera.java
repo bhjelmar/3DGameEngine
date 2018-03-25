@@ -1,9 +1,6 @@
 package com.base.engine.rendering;
 
-import com.base.engine.core.Input;
-import com.base.engine.core.Time;
-import com.base.engine.core.Vector2f;
-import com.base.engine.core.Vector3f;
+import com.base.engine.core.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,22 +15,28 @@ public class Camera {
 	private Vector3f forward;
 	private Vector3f up;
 
+	private Matrix4f projection;
+
 	boolean mouseLocked = false;
 	Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
 
-	public Camera() {
-		this(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), new Vector3f(0, 1, 0));
+	public Camera(float fov, float aspectRatio, float zNear, float zFar) {
+		this.pos = new Vector3f(0, 0, 0);
+		this.forward = new Vector3f(0, 0, 1).normalized();
+		this.up = new Vector3f(0, 1, 0).normalized();
+		this.projection = new Matrix4f().initPerspective(fov, aspectRatio, zNear, zFar);
 	}
 
-	public Camera(Vector3f pos, Vector3f forward, Vector3f up) {
-		this.pos = pos;
-		this.forward = forward.normalized();
-		this.up = up.normalized();
+	public Matrix4f getViewProjection() {
+		Matrix4f cameraRotation = new Matrix4f().initRotation(forward, up);
+		Matrix4f cameraTranslation = new Matrix4f().initTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+
+		return projection.mul(cameraRotation.mul(cameraTranslation));
 	}
 
-	public void input() {
+	public void input(float delta) {
 		float mouseSensitivity = 0.15f;
-		float moveAmount = (float) (25 * Time.getDelta());
+		float moveAmount = 25 * delta;
 
 		if(Input.getKey(Keyboard.KEY_ESCAPE)) {
 			Input.setCursor(true);

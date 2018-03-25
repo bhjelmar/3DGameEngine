@@ -69,21 +69,33 @@ public class Matrix4f {
 		return this;
 	}
 
-	public Matrix4f initProjection(float fov, float width, float height, float zNear, float zFar) {
-		float ar = width / height;
+	public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar) {
 		//distance to center of screen
-		float tanHalfFOV = (float) Math.tan(Math.toRadians(fov / 2));
+		float tanHalfFOV = (float) Math.tan(fov / 2);
 		float zRange = zNear - zFar;
 
-		m[0][0] = 1 / (tanHalfFOV * ar);    m[0][1] = 0;                m[0][2] = 0;                        m[0][3] = 0;
-		m[1][0] = 0;                        m[1][1] = 1 / tanHalfFOV;   m[1][2] = 0;                        m[1][3] = 0;
-		m[2][0] = 0;                        m[2][1] = 0;                m[2][2] = (-zNear - zFar) / zRange; m[2][3] = 2 * zFar * zNear / zRange;
-		m[3][0] = 0;                        m[3][1] = 0;                m[3][2] = 1;                        m[3][3] = 1;
+		m[0][0] = 1 / (tanHalfFOV * aspectRatio);   m[0][1] = 0;                m[0][2] = 0;                        m[0][3] = 0;
+		m[1][0] = 0;                        		m[1][1] = 1 / tanHalfFOV;   m[1][2] = 0;                        m[1][3] = 0;
+		m[2][0] = 0;                        		m[2][1] = 0;                m[2][2] = (-zNear - zFar) / zRange; m[2][3] = 2 * zFar * zNear / zRange;
+		m[3][0] = 0;                        		m[3][1] = 0;                m[3][2] = 1;                        m[3][3] = 1;
 
 		return this;
 	}
 
-	public Matrix4f initCamera(Vector3f forward, Vector3f up) {
+	public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far) {
+		float width = right - left;
+		float height = top - bottom;
+		float depth = far - near;
+
+		m[0][0] = 2 / width;    m[0][1] = 0;    		m[0][2] = 0;    		m[0][3] = -(right + left) / width;
+		m[1][0] = 0;    		m[1][1] = 2 / height;   m[1][2] = 0;    		m[1][3] = -(top + bottom) / height;
+		m[2][0] = 0;    		m[2][1] = 0;    		m[2][2] = -2 / depth;   m[2][3] = -(far + near) / depth;
+		m[3][0] = 0;    		m[3][1] = 0;    		m[3][2] = 0;    		m[3][3] = 1;
+
+		return this;
+	}
+
+	public Matrix4f initRotation(Vector3f forward, Vector3f up) {
 		Vector3f f = forward;
 		f.normalized();
 
@@ -107,9 +119,9 @@ public class Matrix4f {
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 4; j++) {
 				res.set(i, j, m[i][0] * v.get(0, j) +
-							   m[i][1] * v.get(1, j) +
-			                   m[i][2] * v.get(2, j) +
-							   m[i][3] * v.get(3, j));
+						m[i][1] * v.get(1, j) +
+						m[i][2] * v.get(2, j) +
+						m[i][3] * v.get(3, j));
 			}
 		}
 

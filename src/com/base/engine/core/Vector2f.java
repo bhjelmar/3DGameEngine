@@ -1,11 +1,9 @@
 package com.base.engine.core;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter @Setter @ToString @AllArgsConstructor
+@Getter @Setter @EqualsAndHashCode
+@ToString @AllArgsConstructor
 public class Vector2f {
 
 	private float x;
@@ -30,6 +28,14 @@ public class Vector2f {
 		double sin = Math.sin(rad);
 
 		return new Vector2f((float) ((cos * x) - (sin * y)),(float) ((sin * x) + (cos * y)));
+	}
+
+	public Vector2f lerp(Vector2f dest, float lerpFactor) {
+		return dest.sub(this).mult(lerpFactor).add(this);
+	}
+
+	public float cross(Vector2f v) {
+		return x * v.getY() - y * v.getX();
 	}
 
 	public Vector2f add(Vector2f v) {

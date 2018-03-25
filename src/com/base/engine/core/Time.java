@@ -9,11 +9,8 @@ public class Time {
 
 	public static final long SECOND = 1000000000L;
 
-	@Getter @Setter
-	private static double delta;
-
-	public static long getTime() {
-		return System.nanoTime();
+	public static double getTime() {
+		return (double) System.nanoTime() / (double) SECOND;
 	}
 
 }
