@@ -20,7 +20,7 @@ public class Shader {
 
 	public Shader() {
 		program = glCreateProgram();
-		uniforms = new HashMap<String, Integer>();
+		uniforms = new HashMap<>();
 
 		if(program == 0) {
 			System.err.println("Shader creation failed: Could not find valid memory location in constructor");
@@ -140,5 +140,9 @@ public class Shader {
 		}
 
 		return shaderSource.toString();
+	}
+
+	public void setAttribLocation(String attribName, int location) {
+		glBindAttribLocation(program, location, attribName);
 	}
 }
