@@ -1,5 +1,7 @@
 package com.base.engine.rendering;
 
+import com.base.engine.components.BaseLight;
+import com.base.engine.components.PointLight;
 import com.base.engine.core.Matrix4f;
 import com.base.engine.core.Transform;
 import lombok.Getter;
@@ -50,20 +52,20 @@ public class ForwardPoint extends Shader {
 
 		setUniform("eyePos", getRenderingEngine().getMainCamera().getPos());
 
-		setUniform("pointLight", getRenderingEngine().getPointLight());
+		setUniformPointLight("pointLight", (PointLight) getRenderingEngine().getActiveLight());
 	}
 
-	public void setUniform(String uniformName, BaseLight baseLight) {
+	public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
 
-	public void setUniform(String uniformName, PointLight pointLight) {
-		setUniform(uniformName + ".base", pointLight.getBase());
-		setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getConstant());
-		setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getLinear());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getExponent());
-		setUniform(uniformName + ".position", pointLight.getPosition());
+	public void setUniformPointLight(String uniformName, PointLight pointLight) {
+		setUniformBaseLight(uniformName + ".base", pointLight);
+		setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getX());
+		setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getY());
+		setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getZ());
+		setUniform(uniformName + ".position", pointLight.getTransform().getPos());
 		setUniformf(uniformName + ".range", pointLight.getRange());
 	}
 
