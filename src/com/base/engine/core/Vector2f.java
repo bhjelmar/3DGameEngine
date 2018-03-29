@@ -17,6 +17,10 @@ public class Vector2f {
 		return x * v.getX() + y * v.getY();
 	}
 
+	public float max() {
+		return Math.max(x, y);
+	}
+
 	public Vector2f normalized() {
 		float length = length();
 		return new Vector2f(this.x /= length, this.y /= length);

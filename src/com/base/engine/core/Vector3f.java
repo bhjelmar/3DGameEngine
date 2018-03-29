@@ -18,6 +18,10 @@ public class Vector3f {
 		return x * v.getX() + y * v.getY() + z * v.getZ();
 	}
 
+	public float max() {
+		return Math.max(x, Math.max(y, z));
+	}
+
 	public Vector3f cross(Vector3f v) {
 		float x_ = y * v.getZ() - z * v.getY();
 		float y_ = z * v.getX() - x * v.getZ();

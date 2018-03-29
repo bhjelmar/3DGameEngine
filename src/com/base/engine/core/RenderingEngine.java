@@ -1,8 +1,6 @@
 package com.base.engine.core;
 
 import com.base.engine.components.BaseLight;
-import com.base.engine.components.DirectionalLight;
-import com.base.engine.components.PointLight;
 import com.base.engine.rendering.*;
 import com.base.engine.rendering.Window;
 import lombok.Getter;
@@ -17,22 +15,13 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_SRGB;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
+@Getter @Setter
 public class RenderingEngine {
 
-	@Getter @Setter
 	private Camera mainCamera;
-	@Getter @Setter
 	private Vector3f ambientLight;
 
-//	private PointLight[] pointLightList;
-
-//	"Permanent" Structures
-	private List<DirectionalLight> directionalLights;
-	private List<PointLight> pointLights;
-
-//	"actual permanent" structures
 	private List<BaseLight> lights;
-	@Getter
 	private BaseLight activeLight;
 
 	public RenderingEngine() {
