@@ -41,7 +41,7 @@ public class TestGame extends Game {
         GameObject spotLightObject = new GameObject();
         spotLightObject.addComponent(spotLight);
 
-        spotLightObject.getTransform().setPos(new Vector3f(5, 0, 5));
+        spotLightObject.getTransform().getPos().set(5, 0, 5);
 
         getRootObject().addChild(planeObject);
         getRootObject().addChild(directionalLightObject);
